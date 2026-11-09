@@ -1,15 +1,28 @@
 package service;
 
+import dao.ProjetoCSV;
 import java.util.ArrayList;
 import java.util.List;
 import model.Projeto;
 
 public class ProjetoService {
-
-    private final List<Projeto> projetos;
+    private final ProjetoCSV dao;
+    private List<Projeto> projetos;
     
     public ProjetoService(){
         projetos = new ArrayList<>();
+        dao = new ProjetoCSV();
+    }
+
+    public void carregar() throws Exception {
+        projetos = dao.listar();
+    }
+
+    public void salvar()
+        throws Exception {
+
+        dao.salvar(projetos);
+
     }
 
     public boolean adicionar(Projeto projeto){
@@ -67,5 +80,20 @@ public class ProjetoService {
             return true;
         }
         return false;
+    }
+
+    public boolean alterarStatus(int id, String novoStatus) {
+
+    Projeto projeto = buscaPorId(id);
+
+        if (projeto == null) {
+
+            return false;
+
+        }
+
+        projeto.setStatus(novoStatus);
+
+        return true;
     }
 }
