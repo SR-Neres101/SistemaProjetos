@@ -82,9 +82,9 @@ public class ProjetoService {
         return false;
     }
 
-    public boolean alterarStatus(int id, String novoStatus) {
+    public boolean alterar(Projeto projetoAtualizado) {
 
-    Projeto projeto = buscaPorId(id);
+    Projeto projeto = buscaPorId(projetoAtualizado.getId());
 
         if (projeto == null) {
 
@@ -92,7 +92,10 @@ public class ProjetoService {
 
         }
 
-        projeto.setStatus(novoStatus);
+        projeto.setNome(projetoAtualizado.getNome());
+        projeto.setDescricao(projetoAtualizado.getDescricao());
+        projeto.setCategoria(projetoAtualizado.getCategoria());
+        projeto.setStatus(projetoAtualizado.getStatus());
 
         return true;
     }
