@@ -13,7 +13,7 @@ public class Main {
         //Recepção
         System.out.println("Projeto: Portifólio acadêmico\nDesenvolvido em java\nVersão: 1.3");
         System.out.println("============================\n    SYSTEMA DE PROJETOS\n============================\n");
-        int opcao = -1;
+        int opcao;
         do{
             System.out.println("Total de projetos: "+service.listar().size());
         System.out.println("1 - Listar projetos");
@@ -128,7 +128,7 @@ public class Main {
                     System.out.print("Novo status: ");
                     String statusAlt = sc.nextLine();
 
-                    
+
                     Projeto atualizado = new Projeto(idAlterar, nomeAlt, descricaoAlt, categoriaAlt, statusAlt);
 
                     boolean alterado = service.alterar(atualizado);
