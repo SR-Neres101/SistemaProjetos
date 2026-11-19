@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 import model.Projeto;
 import service.ProjetoService;
 
@@ -7,6 +8,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         
         ProjetoService service = new ProjetoService();
+        
 
         service.carregar();
 
@@ -182,5 +184,7 @@ public class Main {
         }
     } while(opcao != 0);
     sc.close();  
+
+    
     }
 }

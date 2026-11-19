@@ -12,6 +12,8 @@ public class TelaProjetos extends JFrame {
 
     private ProjetoService service;
 
+    private boolean dadosCarregados = false;
+
     private JTextField campoNome;
     private JTextField campoDescricao;
 
@@ -32,20 +34,28 @@ public class TelaProjetos extends JFrame {
 
         service = new ProjetoService();
 
-        try {
-            service.carregar();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(
-                this,
-                "Erro ao carregar projetos: " + e.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
+try {
+    service.carregar();
+    dadosCarregados = true;
+
+} catch (Exception e) {
+    dadosCarregados = false;
+
+    JOptionPane.showMessageDialog(
+        this,
+        "Não foi possível carregar os projetos.\n" +
+        "A tela ficará bloqueada para evitar alterações.\n\n" +
+        "Detalhes: " + e.getMessage(),
+        "Erro ao carregar projetos",
+        JOptionPane.ERROR_MESSAGE
+    );
+}
 
         criarComponentes();
         criarEventos();
         carregarTabela();
+
+        atualizarEstadoFormulario();
     }
 
     private void criarComponentes() {
@@ -115,6 +125,17 @@ public class TelaProjetos extends JFrame {
         );
     }
 
+    private void atualizarEstadoFormulario() {
+    campoNome.setEnabled(dadosCarregados);
+    campoDescricao.setEnabled(dadosCarregados);
+
+    comboCategoria.setEnabled(dadosCarregados);
+    comboStatus.setEnabled(dadosCarregados);
+
+    botaoCadastrar.setEnabled(dadosCarregados);
+    botaoLimpar.setEnabled(dadosCarregados);
+}
+
     private void limparFormulario() {
         campoNome.setText("");
         campoDescricao.setText("");
@@ -124,7 +145,19 @@ public class TelaProjetos extends JFrame {
     }
 
     private void cadastrar() {
-        String nome = campoNome.getText().trim();
+    if (!dadosCarregados) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Cadastro bloqueado: os projetos não foram carregados.\n" +
+            "Corrija o arquivo dados/projetos.csv e reinicie a aplicação.",
+            "Dados indisponíveis",
+            JOptionPane.ERROR_MESSAGE
+        );
+
+        return;
+    }
+
+    String nome = campoNome.getText().trim();
         String descricao = campoDescricao.getText().trim();
         String categoria =
             (String) comboCategoria.getSelectedItem();
@@ -151,31 +184,35 @@ public class TelaProjetos extends JFrame {
             proximoId, nome, descricao, categoria, status
         );
 
-        if (!service.adicionar(projeto)) {
-            JOptionPane.showMessageDialog(
-                this, "Não foi possível cadastrar o projeto."
-            );
-            return;
-        }
-
         try {
-            service.salvar();
+    boolean cadastrado = service.adicionarESalvar(projeto);
 
-            JOptionPane.showMessageDialog(
-                this, "Projeto cadastrado com sucesso!"
-            );
+    if (!cadastrado) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Não foi possível cadastrar o projeto."
+        );
+        return;
+    }
 
-            limparFormulario();
-            carregarTabela();
+    JOptionPane.showMessageDialog(
+        this,
+        "Projeto cadastrado e salvo com sucesso!"
+    );
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(
-                this,
-                "Erro ao salvar o projeto: " + e.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
+    limparFormulario();
+    carregarTabela();
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(
+        this,
+        "Não foi possível salvar o projeto.\n" +
+        "O cadastro foi desfeito na memória.\n\n" +
+        "Detalhes: " + e.getMessage(),
+        "Erro ao salvar",
+        JOptionPane.ERROR_MESSAGE
+    );
+}
     }
 
     private void carregarTabela() {

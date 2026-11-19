@@ -18,6 +18,27 @@ public class ProjetoService {
         projetos = dao.listar();
     }
 
+    public boolean adicionarESalvar(Projeto projeto) throws Exception {
+
+    // Primeiro, valida e adiciona à lista.
+    if (!adicionar(projeto)) {
+        return false;
+    }
+
+    try {
+        // Tenta persistir a lista atualizada.
+        salvar();
+        return true;
+
+    } catch (Exception e) {
+        // Se falhar, desfaz a inclusão na memória.
+        removePorId(projeto.getId());
+
+        // Repassa o erro para a interface tratar.
+        throw e;
+    }
+}
+
     public void salvar()
         throws Exception {
 
