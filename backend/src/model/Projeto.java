@@ -2,11 +2,17 @@ package model;
 
 public class Projeto
 {
+
+    
     private int id;
     private String nome;
     private String descricao;
     private String categoria;
     private String status;
+
+    public Projeto()
+{
+}
 
 
     public Projeto(int id, String nome, String descricao, String categoria, String status)
