@@ -34,6 +34,26 @@ public class ProjetoServer {
         // Mapeia a rota base /projetos
 
         server.createContext("/projetos", exchange -> {
+            // Permite a comunicação com o frontend local
+            exchange.getResponseHeaders().set(
+                    "Access-Control-Allow-Origin", "*");
+
+            exchange.getResponseHeaders().set(
+                    "Access-Control-Allow-Methods",
+                    "GET, POST, PUT, DELETE, OPTIONS");
+
+            exchange.getResponseHeaders().set(
+                    "Access-Control-Allow-Headers",
+                    "Content-Type");
+
+            // Responde à verificação prévia do navegador
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.getResponseHeaders().set("Access-Control-Max-Age", "3600");
+                exchange.sendResponseHeaders(204, -1);
+                exchange.close();
+                return;
+            }
+
             String metodo = exchange.getRequestMethod();
             String path = exchange.getRequestURI().getPath();
 

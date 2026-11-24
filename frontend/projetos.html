@@ -1,14 +1,122 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/style.css">
     <title>Sistema de Projetos</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/projetos.js" defer></script>
 </head>
 <body>
-    <h1>Sistema de projetos</h1>
-    <p>Gerenciamento de projetos e portfólio</p>
+    <header class="cabecalho">
+        <div>
+            <h1>Sistema de Projetos</h1>
+            <p>Gerencie seus projetos em um só lugar.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="painel">
+            <h2 id="tituloFormulario">Cadastrar projeto</h2>
+
+            <form id="formProjeto">
+                <input type="hidden" id="projetoId">
+
+                <div class="campo">
+                    <label for="nome">Nome do projeto</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        maxlength="150"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="descricao">Descrição</label>
+                    <textarea
+                        id="descricao"
+                        name="descricao"
+                        rows="3"
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="campo">
+                    <label for="categoria">Categoria</label>
+                    <input
+                        type="text"
+                        id="categoria"
+                        name="categoria"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="">Selecione um status</option>
+                        <option value="Planejado">Planejado</option>
+                        <option value="Em Desenvolvimento">
+                            Em Desenvolvimento
+                        </option>
+                        <option value="Concluído">Concluído</option>
+                    </select>
+                </div>
+
+                <div class="acoes-formulario">
+                    <button type="submit" id="botaoSalvar">
+                        Cadastrar projeto
+                    </button>
+
+                    <button type="button" id="botaoLimpar">
+                        Limpar
+                    </button>
+                </div>
+            </form>
+
+            <p id="mensagem" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="painel">
+            <div class="titulo-lista">
+                <div>
+                    <h2>Meus projetos</h2>
+                    <p>Consulte e gerencie seus registros.</p>
+                </div>
+
+                <button type="button" id="botaoAtualizarLista">
+                    Atualizar lista
+                </button>
+            </div>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Categoria</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="listaProjetos">
+                        <tr>
+                            <td colspan="6">
+                                Os projetos serão carregados aqui.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
