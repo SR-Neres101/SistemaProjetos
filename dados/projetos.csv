@@ -2,6 +2,21 @@ id;nome;descricao;categoria;status
 1;Sistema Acadêmico 2.0;Nova versão do sistema acadêmico;Software;Concluído
 2;Site institucional;Website de uma instituição;Web;Concluído
 3;Aplicativo Mobile;Um aplicativo para Mobile;Mobile;Planejado
-4;Página de portifólio;Uma página focada a dizer mais sobre mim;Web;Em Desenvolvimento
-5;aa;aa;Web;Planejado
-6;aaa;aa;Web;Planejado
+4;Página de portifólio;Uma página focada a dizer mais sobre mim e meus gostos;Web;Em Desenvolvimento
+5;Sistema de Biblioteca;Um sistema focado em agendamento de livros;Software;Em desenvolvimento
+6;Portal Acadêmico;Um sistema focado para os estudantes;Web;Em Desenvolvimento
+7;Controle Financeiro;Um sistema que calcula e regula gastos mensais;Mobile;Planejado
+8;Sistema de Clínicas;Cadastro de pacientes e consultas;Software;Em Desenvolvimento
+9;App de Estudos;Organização de matérias e tarefas;Mobile;Planejado
+10;Plataforma de Eventos;Divulgação e inscrição em eventos;Mobile;Concluído
+11;Portal de Empregos;Divulgação e busca de vagas;Mobile;Planejado
+12;App de Receitas;Catálogo de receitas culinárias;Mobile;Planejado
+13;App de Saúde;Agendamento e lembretes de consultas;Mobile;Em Desenvolvimento
+14;Sistema de Estoque;Controle de produtos e quantidades;Web;Em Desenvolvimento
+15;App de Receitas;Catálogo de receitas culinárias;Software;Concluído
+16;App de Transporte;Consulta de rotas e horários;Mobile;Em Desenvolvimento
+17;Loja Virtual;Plataforma de vendas pela internet;Software;Planejado
+18;App de Entregas;Rastreamento e gerenciamento de entregas;Mobile;Em Desenvolvimento
+19;Portal de Notícias;Publicação e consulta de notícias;Mobile;Planejado
+20;Sistema de RH;Gerenciamento de funcionários e férias;Software;Concluído
+21;teste;n3;cat;ss

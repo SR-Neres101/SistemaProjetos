@@ -46,7 +46,6 @@ public class ProjetoServer {
                     "Access-Control-Allow-Headers",
                     "Content-Type");
 
-            // Responde à verificação prévia do navegador
             if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
                 exchange.getResponseHeaders().set("Access-Control-Max-Age", "3600");
                 exchange.sendResponseHeaders(204, -1);
@@ -142,6 +141,12 @@ public class ProjetoServer {
                         return;
                     }
 
+                    if (nomeDuplicado(service.listar(), nome, 0)) {
+                        responder(exchange, 409,
+                                "{\"erro\":\"Já existe um projeto com esse nome\"}");
+                        return;
+                    }
+
                     Projeto projeto = new Projeto(
                             id, nome, descricao, categoria, status);
 
@@ -223,6 +228,12 @@ public class ProjetoServer {
                             || categoria.isBlank() || status.isBlank()) {
                         responder(exchange, 400,
                                 "{\"erro\":\"Todos os campos são obrigatórios\"}");
+                        return;
+                    }
+
+                    if (nomeDuplicado(service.listar(), nome, id)) {
+                        responder(exchange, 409,
+                                "{\"erro\":\"Já existe um projeto com esse nome\"}");
                         return;
                     }
 
@@ -376,5 +387,26 @@ public class ProjetoServer {
         if (texto == null)
             return "";
         return texto.replace("\"", "\\\"");
+    }
+
+    private static boolean nomeDuplicado(
+            List<Projeto> projetos, String nome, int idIgnorado) {
+
+        String nomeNormalizado = normalizarNome(nome);
+
+        for (Projeto projeto : projetos) {
+            if (projeto.getId() != idIgnorado
+                    && normalizarNome(projeto.getNome()).equals(nomeNormalizado)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static String normalizarNome(String nome) {
+        return java.text.Normalizer.normalize(
+                nome.trim().toLowerCase(java.util.Locale.ROOT),
+                java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "");
     }
 }

@@ -4,119 +4,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f4f0e8">
 
-    <title>Sistema de Projetos</title>
+    <title>Projetos | SistemaProjetos</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/projetos.js" defer></script>
 </head>
-<body>
-    <header class="cabecalho">
-        <div>
-            <h1>Sistema de Projetos</h1>
-            <p>Gerencie seus projetos em um só lugar.</p>
+<body class="pagina-projetos">
+
+    <aside class="barra-lateral">
+        <a href="index.html" class="marca" aria-label="SistemaProjetos">
+            <i data-lucide="layers-3"></i>
+        </a>
+
+        <nav class="navegacao" aria-label="Menu principal">
+            <a href="projetos.html" class="item-menu ativo"
+               title="Projetos" aria-label="Projetos"
+               aria-current="page">
+                <i data-lucide="folder-kanban"></i>
+            </a>
+
+            <a href="index.html" class="item-menu"
+               title="Dashboard" aria-label="Dashboard">
+                <i data-lucide="layout-dashboard"></i>
+            </a>
+
+            
+        </nav>
+
+        <div class="menu-inferior">
+            <button type="button" id="alternarTema"
+                    class="item-menu botao-icone"
+                    title="Alternar tema" aria-label="Alternar tema">
+                <i data-lucide="moon"></i>
+            </button>
         </div>
-    </header>
+    </aside>
 
-    <main class="container">
-        <section class="painel">
-            <h2 id="tituloFormulario">Cadastrar projeto</h2>
+    <main class="conteudo-dashboard">
 
-            <form id="formProjeto">
-                <input type="hidden" id="projetoId">
-
-                <div class="campo">
-                    <label for="nome">Nome do projeto</label>
-                    <input
-                        type="text"
-                        id="nome"
-                        name="nome"
-                        maxlength="150"
-                        required
-                    >
-                </div>
-
-                <div class="campo">
-                    <label for="descricao">Descrição</label>
-                    <textarea
-                        id="descricao"
-                        name="descricao"
-                        rows="3"
-                        required
-                    ></textarea>
-                </div>
-
-                <div class="campo">
-                    <label for="categoria">Categoria</label>
-                    <input
-                        type="text"
-                        id="categoria"
-                        name="categoria"
-                        required
-                    >
-                </div>
-
-                <div class="campo">
-                    <label for="status">Status</label>
-                    <select id="status" name="status" required>
-                        <option value="">Selecione um status</option>
-                        <option value="Planejado">Planejado</option>
-                        <option value="Em Desenvolvimento">
-                            Em Desenvolvimento
-                        </option>
-                        <option value="Concluído">Concluído</option>
-                    </select>
-                </div>
-
-                <div class="acoes-formulario">
-                    <button type="submit" id="botaoSalvar">
-                        Cadastrar projeto
-                    </button>
-
-                    <button type="button" id="botaoLimpar">
-                        Limpar
-                    </button>
-                </div>
-            </form>
-
-            <p id="mensagem" role="status" aria-live="polite"></p>
-        </section>
-
-        <section class="painel">
-            <div class="titulo-lista">
-                <div>
-                    <h2>Meus projetos</h2>
-                    <p>Consulte e gerencie seus registros.</p>
-                </div>
-
-                <button type="button" id="botaoAtualizarLista">
-                    Atualizar lista
-                </button>
+        <header class="cabecalho-dashboard">
+            <div>
+                <span class="texto-secundario">GERENCIAMENTO</span>
+                <h1>Projetos</h1>
+                <p>Cadastre, acompanhe e organize seus projetos.</p>
             </div>
 
-            <div class="tabela-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Descrição</th>
-                            <th>Categoria</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
+            <button type="button" class="botao-principal"
+                    id="botaoNovoProjeto">
+                <i data-lucide="plus"></i>
+                Novo projeto
+            </button>
+        </header>
 
-                    <tbody id="listaProjetos">
-                        <tr>
-                            <td colspan="6">
-                                Os projetos serão carregados aqui.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <section class="resumo-projetos" aria-label="Resumo dos projetos">
+
+            <article class="cartao-dashboard indicador indicador-compacto">
+                <div class="icone-indicador icone-total">
+                    <i data-lucide="folders"></i>
+                </div>
+                <p>Total de projetos</p>
+                <strong id="totalProjetosPagina">—</strong>
+                <span>Registros cadastrados</span>
+            </article>
+
+            <button type="button" class="cartao-dashboard indicador indicador-compacto filtro-status"
+                    data-status-filtro="Em Desenvolvimento">
+                <div class="icone-indicador icone-andamento">
+                    <i data-lucide="loader-circle"></i>
+                </div>
+                <p>Em andamento</p>
+                <strong id="totalAndamento">—</strong>
+                <span>Projetos em desenvolvimento</span>
+            </button>
+
+            <button type="button" class="cartao-dashboard indicador indicador-compacto filtro-status"
+                    data-status-filtro="Planejado">
+                <div class="icone-indicador icone-planejado">
+                    <i data-lucide="calendar-clock"></i>
+                </div>
+                <p>Planejados</p>
+                <strong id="totalPlanejados">—</strong>
+                <span>Projetos previstos</span>
+            </button>
+
+            <button type="button" class="cartao-dashboard indicador indicador-compacto filtro-status"
+                    data-status-filtro="Concluído">
+                <div class="icone-indicador icone-concluido">
+                    <i data-lucide="check-circle-2"></i>
+                </div>
+                <p>Concluídos</p>
+                <strong id="totalConcluidosPagina">—</strong>
+                <span>Projetos finalizados</span>
+            </button>
+
         </section>
+
+        <section class="area-gerenciamento">
+
+            <section class="cartao-dashboard painel-formulario" id="painelFormulario">
+                <div class="titulo-cartao">
+                    <div>
+                        <h2 id="tituloFormulario">Cadastrar projeto</h2>
+                        <p>Preencha os dados do projeto.</p>
+                    </div>
+                    <i data-lucide="clipboard-list"></i>
+                </div>
+
+                <form id="formProjeto">
+                    <input type="hidden" id="projetoId">
+
+                    <div class="campo">
+                        <label for="nome">Nome do projeto</label>
+                        <input type="text" id="nome" name="nome"
+                               maxlength="150" required
+                               placeholder="Ex.: Sistema acadêmico">
+                    </div>
+
+                    <div class="campo">
+                        <label for="descricao">Descrição</label>
+                        <textarea id="descricao" name="descricao"
+                                  rows="4" required
+                                  placeholder="Descreva o objetivo do projeto"></textarea>
+                    </div>
+
+                    <div class="campo">
+                        <label for="categoria">Categoria</label>
+                        <input type="text" id="categoria" name="categoria"
+                               required maxlength="80"
+                               placeholder="Ex.: Software, Web, Mobile">
+                    </div>
+
+                    <div class="campo">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required>
+                            <option value="">Selecione um status</option>
+                            <option value="Planejado">Planejado</option>
+                            <option value="Em Desenvolvimento">Em Desenvolvimento</option>
+                            <option value="Concluído">Concluído</option>
+                        </select>
+                    </div>
+
+                    <div class="acoes-formulario">
+                        <button type="submit" id="botaoSalvar"
+                                class="botao-principal">
+                            Cadastrar projeto
+                        </button>
+
+                        <button type="button" id="botaoLimpar"
+                                class="botao-secundario">
+                            Limpar
+                        </button>
+                    </div>
+                </form>
+
+                <p id="mensagem" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="cartao-dashboard painel-lista">
+                <div class="titulo-cartao titulo-lista">
+                    <div>
+                        <h2>Meus projetos</h2>
+                        <p>Consulte e gerencie seus registros.</p>
+                    </div>
+
+                    <button type="button" id="botaoAtualizarLista"
+                            class="botao-secundario">
+                        <i data-lucide="refresh-cw"></i>
+                        Atualizar
+                    </button>
+                </div>
+
+                <div class="campo campo-busca">
+                    <label for="buscarProjeto">Buscar projeto</label>
+                    <input type="search" id="buscarProjeto"
+                           placeholder="Buscar por nome ou categoria...">
+                </div>
+
+                <div class="tabela-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Projeto</th>
+                                <th>Categoria</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="listaProjetos">
+                            <tr>
+                                <td colspan="5">
+                                    Os projetos serão carregados aqui.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="contadorProjetos" class="texto-secundario"></p>
+            </section>
+
+        </section>
+
+        <footer class="rodape-dashboard">SistemaProjetos</footer>
     </main>
+
+    <script>
+        if (window.lucide) lucide.createIcons();
+
+        // Abre o formulário para um novo cadastro.
+        document.getElementById("botaoNovoProjeto")
+            .addEventListener("click", () => {
+                document.getElementById("formProjeto").reset();
+                document.getElementById("projetoId").value = "";
+                document.getElementById("tituloFormulario").textContent =
+                    "Cadastrar projeto";
+                document.getElementById("botaoSalvar").textContent =
+                    "Cadastrar projeto";
+                document.getElementById("painelFormulario")
+                    .scrollIntoView({ behavior: "smooth", block: "start" });
+                document.getElementById("nome").focus();
+            });
+    </script>
+
 </body>
 </html>

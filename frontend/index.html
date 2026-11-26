@@ -1,12 +1,218 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f4f0e8">
+
+    <title>Dashboard | SistemaProjetos</title>
+
     <link rel="stylesheet" href="css/style.css">
-    <title>Sistema Projetos</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
-    
+
+<body class="pagina-dashboard">
+
+    <aside class="barra-lateral">
+        <a href="index.html" class="marca" aria-label="SistemaProjetos">
+            <i data-lucide="layers-3"></i>
+        </a>
+
+        <nav class="navegacao" aria-label="Menu principal">
+            <a href="projetos.html" class="item-menu"
+               title="Projetos" aria-label="Projetos">
+                <i data-lucide="folder-kanban"></i>
+            </a>
+
+            <a href="index.html" class="item-menu ativo"
+               title="Dashboard" aria-label="Dashboard"
+               aria-current="page">
+                <i data-lucide="layout-dashboard"></i>
+            </a>
+
+            
+        </nav>
+
+        <div class="menu-inferior">
+            <button type="button" id="alternarTema"
+                    class="item-menu botao-icone"
+                    title="Alternar tema"
+                    aria-label="Alternar tema">
+                <i data-lucide="moon"></i>
+            </button>
+        </div>
+    </aside>
+
+    <main class="conteudo-dashboard">
+
+        <header class="cabecalho-dashboard">
+            <div>
+                <span class="texto-secundario">VISÃO GERAL</span>
+                <h1>Dashboard</h1>
+                <p>Acompanhe o andamento dos seus projetos.</p>
+            </div>
+
+            <a href="projetos.html" class="botao-principal">
+                <i data-lucide="plus"></i>
+                Novo projeto
+            </a>
+        </header>
+
+        <section class="resumo-dashboard"
+                 aria-label="Resumo dos projetos">
+
+            <article class="cartao-dashboard cartao-grafico">
+                <div class="titulo-cartao">
+                    <div>
+                        <h2>Status dos projetos</h2>
+                        <p>Distribuição por situação</p>
+                    </div>
+                    <i data-lucide="chart-pie"></i>
+                </div>
+
+                <div class="area-grafico">
+                    <div class="grafico-rosca" id="graficoStatus"
+                         role="img"
+                         aria-label="Distribuição dos projetos por status">
+                        <div class="centro-grafico">
+                            <strong id="totalGrafico">—</strong>
+                            <span>projetos</span>
+                        </div>
+                    </div>
+
+                    <div id="legendaStatus" class="legenda-grafico">
+                        <p>Carregando dados...</p>
+                    </div>
+                </div>
+            </article>
+
+            <div class="cartoes-indicadores">
+
+                <article class="cartao-dashboard indicador">
+                    <div class="icone-indicador icone-total">
+                        <i data-lucide="folders"></i>
+                    </div>
+
+                    <p>Total de projetos</p>
+                    <strong id="totalProjetos">—</strong>
+                    <span>Projetos cadastrados</span>
+                </article>
+
+                <article class="cartao-dashboard indicador">
+                    <div class="icone-indicador icone-concluido">
+                        <i data-lucide="check-circle-2"></i>
+                    </div>
+
+                    <p>Projetos concluídos</p>
+                    <strong id="projetosConcluidos">—</strong>
+                    <span>Projetos finalizados</span>
+                </article>
+
+            </div>
+        </section>
+
+
+<!-- Gráficos adicionais -->
+<section class="secao-graficos-adicionais">
+
+    <article class="cartao-dashboard cartao-grafico">
+        <div class="titulo-cartao">
+            <div>
+                <h2>Projetos por categoria</h2>
+                <p>Distribuição por tipo de projeto</p>
+            </div>
+            <i data-lucide="chart-pie"></i>
+        </div>
+
+        <div class="area-grafico">
+            <div class="grafico-rosca" id="graficoCategoria"
+                 role="img"
+                 aria-label="Distribuição dos projetos por categoria">
+                <div class="centro-grafico">
+                    <strong id="totalGraficoCategoria">—</strong>
+                    <span>projetos</span>
+                </div>
+            </div>
+
+            <div id="legendaCategoria" class="legenda-grafico">
+                <p>Carregando dados...</p>
+            </div>
+        </div>
+    </article>
+
+    <article class="cartao-dashboard cartao-grafico">
+        <div class="titulo-cartao">
+            <div>
+                <h2>Situação geral</h2>
+                <p>Concluídos e não concluídos</p>
+            </div>
+            <i data-lucide="chart-pie"></i>
+        </div>
+
+        <div class="area-grafico">
+            <div class="grafico-rosca" id="graficoGeral"
+                 role="img"
+                 aria-label="Comparação entre projetos concluídos e não concluídos">
+                <div class="centro-grafico">
+                    <strong id="totalGraficoGeral">—</strong>
+                    <span>projetos</span>
+                </div>
+            </div>
+
+            <div id="legendaGeral" class="legenda-grafico">
+                <p>Carregando dados...</p>
+            </div>
+        </div>
+    </article>
+
+</section>
+
+
+        <section class="cartao-dashboard secao-recentes">
+            <div class="titulo-cartao">
+                <div>
+                    <h2>Projetos recentes</h2>
+                    <p>Projetos cadastrados no sistema</p>
+                </div>
+
+                <a href="projetos.html" class="link-secundario">
+                    Ver todos
+                    <i data-lucide="arrow-up-right"></i>
+                </a>
+            </div>
+
+            <div id="listaRecentes" class="lista-recentes"
+                 aria-live="polite">
+                <p class="estado-vazio">Carregando projetos...</p>
+            </div>
+        </section>
+
+        <section class="cartao-dashboard secao-atividades">
+            <div class="titulo-cartao">
+                <div>
+                    <h2>Atividades recentes</h2>
+                    <p>Últimas movimentações do sistema</p>
+                </div>
+
+                <i data-lucide="history"></i>
+            </div>
+
+            <div id="listaAtividades" class="lista-atividades"
+                 aria-live="polite">
+                <p class="estado-vazio">
+                    O histórico de atividades será exibido aqui
+                    quando houver registros disponíveis.
+                </p>
+            </div>
+        </section>
+
+        <footer class="rodape-dashboard">
+            SistemaProjetos
+        </footer>
+
+    </main>
+
+    <script src="js/dashboard.js"></script>
 </body>
 </html>

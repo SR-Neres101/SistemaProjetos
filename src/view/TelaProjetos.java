@@ -33,9 +33,12 @@ public class TelaProjetos extends JFrame {
 
     public TelaProjetos() {
         setTitle("Sistema de Projetos");
-        setSize(800, 500);
+        setSize(1100, 700);
+        setMinimumSize(new Dimension(900, 600));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        getContentPane().setBackground(new Color(244, 240, 232));
 
         apiClient = new ApiClient();
 
@@ -60,6 +63,20 @@ public class TelaProjetos extends JFrame {
         carregarTabela();
 
         atualizarEstadoFormulario();
+        iniciarAtualizacaoAutomatica();
+
+    }
+
+    private void iniciarAtualizacaoAutomatica() {
+        javax.swing.Timer timer = new javax.swing.Timer(3000, e -> {
+            if (campoNome.getText().isBlank()
+                    && campoDescricao.getText().isBlank()
+                    && tabela.getSelectedRow() == -1) {
+                carregarTabela();
+            }
+        });
+
+        timer.start();
     }
 
     private void criarComponentes() {
@@ -76,10 +93,55 @@ public class TelaProjetos extends JFrame {
                 "Concluído"
         });
 
+        Color fundoCampo = new Color(255, 253, 249);
+        Color corTexto = new Color(53, 54, 47);
+        Color corBorda = new Color(233, 227, 217);
+
+        JTextField[] camposTexto = { campoNome, campoDescricao };
+
+        for (JTextField campo : camposTexto) {
+            campo.setBackground(fundoCampo);
+            campo.setForeground(corTexto);
+            campo.setCaretColor(corTexto);
+            campo.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(corBorda),
+                    BorderFactory.createEmptyBorder(8, 10, 8, 10)));
+            campo.setFont(new Font("Arial", Font.PLAIN, 14));
+        }
+
+        JComboBox<?>[] combos = { comboCategoria, comboStatus };
+
+        for (JComboBox<?> combo : combos) {
+            combo.setBackground(fundoCampo);
+            combo.setForeground(corTexto);
+            combo.setFont(new Font("Arial", Font.PLAIN, 14));
+        }
+
         botaoCadastrar = new JButton("Cadastrar");
         botaoEditar = new JButton("Editar");
         botaoExcluir = new JButton("Excluir");
         botaoLimpar = new JButton("Limpar");
+
+        botaoCadastrar.setBackground(new Color(184, 111, 82));
+        botaoCadastrar.setForeground(Color.WHITE);
+
+        botaoEditar.setBackground(new Color(126, 146, 152));
+        botaoEditar.setForeground(Color.WHITE);
+
+        botaoExcluir.setBackground(new Color(184, 92, 80));
+        botaoExcluir.setForeground(Color.WHITE);
+
+        botaoLimpar.setBackground(new Color(137, 135, 126));
+        botaoLimpar.setForeground(Color.WHITE);
+
+        for (JButton botao : new JButton[] {
+                botaoCadastrar, botaoEditar, botaoExcluir, botaoLimpar
+        }) {
+            botao.setFocusPainted(false);
+            botao.setOpaque(true);
+            botao.setBorderPainted(false);
+            botao.setMargin(new Insets(10, 16, 10, 16));
+        }
 
         modelo = new DefaultTableModel(
                 new String[] { "ID", "Nome", "Categoria", "Status" }, 0) {
@@ -92,32 +154,78 @@ public class TelaProjetos extends JFrame {
         tabela = new JTable(modelo);
 
         JPanel painelFormulario = new JPanel(
-                new GridLayout(0, 2, 8, 8));
+                new BorderLayout(0, 14));
 
-        painelFormulario.setBorder(
+        painelFormulario.setBackground(new Color(255, 253, 249));
+        painelFormulario.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(233, 227, 217)),
+                BorderFactory.createEmptyBorder(18, 18, 18, 18)));
+
+        JLabel tituloFormulario = new JLabel("Dados do projeto");
+        tituloFormulario.setFont(new Font("Arial", Font.BOLD, 18));
+        tituloFormulario.setForeground(new Color(53, 54, 47));
+
+        JPanel painelCampos = new JPanel(new GridLayout(2, 4, 12, 8));
+        painelCampos.setBackground(new Color(255, 253, 249));
+
+        JLabel[] rotulos = {
+                new JLabel("Nome:"),
+                new JLabel("Descrição:"),
+                new JLabel("Categoria:"),
+                new JLabel("Status:")
+        };
+
+        for (JLabel rotulo : rotulos) {
+            rotulo.setForeground(new Color(53, 54, 47));
+            rotulo.setFont(new Font("Arial", Font.BOLD, 12));
+            painelCampos.add(rotulo);
+        }
+
+        painelCampos.add(campoNome);
+        painelCampos.add(campoDescricao);
+        painelCampos.add(comboCategoria);
+        painelCampos.add(comboStatus);
+
+        JPanel painelBotoes = new JPanel(
+                new FlowLayout(FlowLayout.LEFT, 10, 0));
+        painelBotoes.setBackground(new Color(255, 253, 249));
+
+        painelBotoes.add(botaoCadastrar);
+        painelBotoes.add(botaoEditar);
+        painelBotoes.add(botaoExcluir);
+        painelBotoes.add(botaoLimpar);
+
+        painelFormulario.add(tituloFormulario, BorderLayout.NORTH);
+        painelFormulario.add(painelCampos, BorderLayout.CENTER);
+        painelFormulario.add(painelBotoes, BorderLayout.SOUTH);
+
+        getContentPane().setBackground(new Color(244, 240, 232));
+
+        setLayout(new BorderLayout(0, 12));
+
+        JPanel painelTabela = new JPanel(new BorderLayout());
+        painelTabela.setBackground(new Color(255, 253, 249));
+        painelTabela.setBorder(
                 BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        painelFormulario.add(new JLabel("Nome:"));
-        painelFormulario.add(campoNome);
+        tabela.setBackground(new Color(255, 253, 249));
+        tabela.setForeground(new Color(53, 54, 47));
+        tabela.setRowHeight(28);
+        tabela.setGridColor(new Color(233, 227, 217));
+        tabela.setSelectionBackground(new Color(234, 213, 138));
+        tabela.setSelectionForeground(new Color(53, 54, 47));
 
-        painelFormulario.add(new JLabel("Descrição:"));
-        painelFormulario.add(campoDescricao);
+        tabela.getTableHeader().setBackground(new Color(248, 245, 239));
+        tabela.getTableHeader().setForeground(new Color(53, 54, 47));
 
-        painelFormulario.add(new JLabel("Categoria:"));
-        painelFormulario.add(comboCategoria);
+        JScrollPane rolagem = new JScrollPane(tabela);
+        rolagem.getViewport().setBackground(new Color(255, 253, 249));
+        rolagem.setBorder(BorderFactory.createEmptyBorder());
 
-        painelFormulario.add(new JLabel("Status:"));
-        painelFormulario.add(comboStatus);
-
-        painelFormulario.add(botaoCadastrar);
-        painelFormulario.add(botaoLimpar);
-        painelFormulario.add(botaoEditar);
-        painelFormulario.add(botaoExcluir);
-
-        setLayout(new BorderLayout());
+        painelTabela.add(rolagem, BorderLayout.CENTER);
 
         add(painelFormulario, BorderLayout.NORTH);
-        add(new JScrollPane(tabela), BorderLayout.CENTER);
+        add(painelTabela, BorderLayout.CENTER);
     }
 
     private void criarEventos() {
@@ -130,9 +238,8 @@ public class TelaProjetos extends JFrame {
         botaoEditar.addActionListener(
                 e -> editarProjeto());
 
-                botaoExcluir.addActionListener(
-    e -> excluirProjeto()
-);
+        botaoExcluir.addActionListener(
+                e -> excluirProjeto());
 
         tabela.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -158,6 +265,7 @@ public class TelaProjetos extends JFrame {
         comboCategoria.setSelectedIndex(0);
         comboStatus.setSelectedIndex(0);
         campoNome.requestFocusInWindow();
+        tabela.clearSelection();
     }
 
     private void cadastrar() {
@@ -326,53 +434,48 @@ public class TelaProjetos extends JFrame {
         }
     }
 
+    private void excluirProjeto() {
+        int linha = tabela.getSelectedRow();
 
-private void excluirProjeto() {
-    int linha = tabela.getSelectedRow();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione um projeto na tabela para excluir.");
+            return;
+        }
 
-    if (linha == -1) {
-        JOptionPane.showMessageDialog(
-            this,
-            "Selecione um projeto na tabela para excluir."
-        );
-        return;
-    }
+        int id = (int) modelo.getValueAt(linha, 0);
 
-    int id = (int) modelo.getValueAt(linha, 0);
+        int confirmacao = JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza de que deseja excluir o projeto selecionado?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
 
-    int confirmacao = JOptionPane.showConfirmDialog(
-        this,
-        "Tem certeza de que deseja excluir o projeto selecionado?",
-        "Confirmar exclusão",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.WARNING_MESSAGE
-    );
+        if (confirmacao != JOptionPane.YES_OPTION) {
+            return;
+        }
 
-    if (confirmacao != JOptionPane.YES_OPTION) {
-        return;
-    }
+        try {
+            apiClient.excluirProjeto(id);
 
-    try {
-        apiClient.excluirProjeto(id);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Projeto excluído com sucesso!");
 
-        JOptionPane.showMessageDialog(
-            this,
-            "Projeto excluído com sucesso!"
-        );
+            idProjetoSelecionado = -1;
+            limparFormulario();
+            carregarTabela();
 
-        idProjetoSelecionado = -1;
-        limparFormulario();
-        carregarTabela();
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(
-            this,
-            "Não foi possível excluir o projeto.\n\n"
-                + e.getMessage(),
-            "Erro ao excluir",
-            JOptionPane.ERROR_MESSAGE
-        );
-    }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Não foi possível excluir o projeto.\n\n"
+                            + e.getMessage(),
+                    "Erro ao excluir",
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
     }
 
@@ -383,4 +486,3 @@ private void excluirProjeto() {
         tela.setVisible(true);
     }
 }
-
